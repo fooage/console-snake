@@ -31,11 +31,11 @@ Open the `snake.exe` in the `./bin` directory and start to play this game.
 
 ### Operation guide
 
--   First turn off the input method to ensure that the American keyboard is input.
+- First turn off the input method to ensure that the American keyboard is input.
 
--   Use the <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd> to control up, left, down, right.
+- Use the <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd>, <kbd>D</kbd> to control up, left, down, right.
 
--   There are five levels of game difficulty. Snake will move faster and fast as the score increases.
+- There are five levels of game difficulty. Snake will move faster and fast as the score increases.
 
 ### Game rules
 
