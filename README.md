@@ -1,5 +1,3 @@
-# Snake
-
 Snake is a game that many people have played. This command line window implemented with `C++` is not bad. The double-buffered output screen solves the splash screen, improves the game experience, and provides a simple speed level that can increase speed and difficulty as the snake grows longer.
 
 ## Installation
