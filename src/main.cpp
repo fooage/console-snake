@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "../inc/each_point.h"
-#include "../inc/set_snake.h"
+#include "../inc/point.h"
+#include "../inc/snake.h"
 using namespace std;
 
 // The settings of Set cursor and buffer.
@@ -70,7 +70,7 @@ void DrawGraphics(Snake playerSnake) {
     map[1][i] = '#';
     map[30][i] = '#';
   }
-  for (vector<eachPoint>::iterator it = playerSnake.snakeBody.begin();
+  for (vector<point>::iterator it = playerSnake.snakeBody.begin();
        it < playerSnake.snakeBody.end(); it++) {
     map[it->r][it->c] = '*';
   }
@@ -84,7 +84,7 @@ label:
   *b = rand() % 28 + 2;
   // There is a check to prevent refresh the dot covered by this snake. If the
   // dot is miss it will be a real trouble.
-  for (vector<eachPoint>::iterator it = playerSnake.snakeBody.begin();
+  for (vector<point>::iterator it = playerSnake.snakeBody.begin();
        it < playerSnake.snakeBody.end(); it++) {
     if (it->r == *a && it->c == *b) {
       goto label;

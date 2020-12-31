@@ -1,8 +1,8 @@
-#include "../inc/set_snake.h"
+#include "../inc/snake.h"
 
 #include <vector>
 
-#include "../inc/each_point.h"
+#include "../inc/point.h"
 using namespace std;
 
 extern char map[31][31];
@@ -10,7 +10,7 @@ extern char map[31][31];
 // The snake's constructor set the start location, direction and the initial
 // length of the snake.
 Snake::Snake() {
-  struct eachPoint temp;
+  struct point temp;
   for (int i = 15; i <= 17; i++) {
     temp.r = 15;
     temp.c = i;
@@ -33,8 +33,8 @@ Snake::~Snake() {}
 void Snake::RefreshBody(char nowDirection) {
   tailH = snakeBody.back().r;
   tailL = snakeBody.back().c;
-  for (vector<eachPoint>::iterator it = snakeBody.end() - 1;
-       it > snakeBody.begin(); it--) {
+  for (vector<point>::iterator it = snakeBody.end() - 1; it > snakeBody.begin();
+       it--) {
     it->r = (it - 1)->r;
     it->c = (it - 1)->c;
   }
@@ -97,7 +97,7 @@ void Snake::RefreshBody(char nowDirection) {
 // Create new nodes for the snake body. The body of snake is a vector container,
 // when the snake eat a dot there will be a new body be pushed.
 void Snake::NewBody() {
-  struct eachPoint newBody;
+  struct point newBody;
   newBody.r = tailH;
   newBody.c = tailL;
   snakeBody.push_back(newBody);
@@ -106,8 +106,8 @@ void Snake::NewBody() {
 
 // Self-check if snake hits himself.
 bool Snake::SelfCheck() {
-  for (vector<eachPoint>::iterator it = snakeBody.begin() + 1;
-       it < snakeBody.end(); it++) {
+  for (vector<point>::iterator it = snakeBody.begin() + 1; it < snakeBody.end();
+       it++) {
     if (it->r == snakeBody.front().r && it->c == snakeBody.front().c) {
       return true;
     }

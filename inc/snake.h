@@ -1,8 +1,8 @@
-#ifndef SET_SNAKE_H
-#define SET_SNAKE_H
+#ifndef SNAKE_H
+#define SNAKE_H
 #include <vector>
 
-#include "each_point.h"
+#include "point.h"
 using namespace std;
 
 // The definition of snake class which is core of this game. Snake has some
@@ -19,7 +19,7 @@ class Snake {
 
  public:
   // Snake body which is public used.
-  vector<eachPoint> snakeBody;
+  vector<point> snakeBody;
   // Some locations of snake's body.
   int headH;
   int headL;
