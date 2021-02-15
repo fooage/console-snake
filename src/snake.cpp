@@ -24,11 +24,9 @@ Snake::Snake() {
   tailL = 17;
 }
 
-// The destructor of snake.
 Snake::~Snake() {}
 
-// Refresh snake's body position to achieve its movement. According to the
-// snake’s current direction and the changed direction. There are a judgment
+// Refresh snake's body position to achieve its movement. There are a judgment
 // forbiden the snake reverse move.
 void Snake::RefreshBody(char nowDirection) {
   tailH = snakeBody.back().r;

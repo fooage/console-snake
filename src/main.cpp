@@ -21,8 +21,7 @@ DWORD bytes = 0;
 char map[31][31];
 
 // ShowGraphics is a double buffer display function to make the image
-// consistent. The double buffer provide an advantage is that no screen
-// flickering occurs.
+// consistent.
 void ShowGraphics(Snake playerSnake) {
   showCircle = !showCircle;
   // Switch current buffer to write down the image.
@@ -53,8 +52,6 @@ void ShowGraphics(Snake playerSnake) {
   SetConsoleActiveScreenBuffer(*outPuter);
 }
 
-// Generate image into the current buffer. This is simple because the image had
-// been writen in the matrix, but this function build the map border in matrix.
 void DrawGraphics(Snake playerSnake) {
   for (int i = 0; i < 31; i++) {
     for (int j = 0; j < 31; j++) {
@@ -76,7 +73,6 @@ void DrawGraphics(Snake playerSnake) {
   }
 }
 
-// Refresh dot to promote the progress of the game.
 void MakeDot(int *a, int *b, Snake playerSnake) {
 label:
   srand(time(0));
@@ -93,8 +89,6 @@ label:
 }
 
 int main() {
-  // Some window-related settings. The title of this window is snake and the
-  // window have 63 columns and 34 rows.
   SetConsoleTitle("Snake");
   HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_CURSOR_INFO CursorInfo;
