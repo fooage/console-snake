@@ -15,13 +15,13 @@ Snake::Snake() {
     temp.r = 15;
     temp.c = i;
     this->snakeBody.push_back(temp);
-    this->snakeLength = 3;
-    this->snakeDirection = 'a';
   }
-  headH = 15;
-  headL = 15;
-  tailH = 15;
-  tailL = 17;
+  this->snakeLength = 3;
+  this->snakeDirection = 'a';
+  this->headH = 15;
+  this->headL = 15;
+  this->tailH = 15;
+  this->tailL = 17;
 }
 
 Snake::~Snake() {}
