@@ -19,10 +19,10 @@ class Snake {
  public:
   // Snake body which is public used.
   vector<point> snakeBody;
-  int headH;
-  int headL;
-  int tailH;
-  int tailL;
+  int headRow;
+  int headCol;
+  int tailRow;
+  int tailCol;
   Snake();
   ~Snake();
   void RefreshBody(char);  // Refresh body position to achieve its movement.

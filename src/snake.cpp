@@ -1,27 +1,22 @@
 #include "../inc/snake.h"
 
-#include <vector>
-
-#include "../inc/point.h"
 using namespace std;
 
-extern char map[31][31];
+extern vector<vector<char>> map;
 
 // The snake's constructor set the start location, direction and the initial
 // length of the snake.
 Snake::Snake() {
-  struct point temp;
-  for (int i = 15; i <= 17; i++) {
-    temp.r = 15;
-    temp.c = i;
-    this->snakeBody.push_back(temp);
-  }
-  this->snakeLength = 3;
-  this->snakeDirection = 'a';
-  this->headH = 15;
-  this->headL = 15;
-  this->tailH = 15;
-  this->tailL = 17;
+  struct point head;
+  head.row = map.size() / 2;
+  head.col = map[0].size() / 2;
+  this->snakeBody.push_back(head);
+  this->snakeLength = 1;
+  this->snakeDirection = 'd';
+  this->headRow = head.row;
+  this->headCol = head.col;
+  this->tailRow = head.row;
+  this->tailCol = head.col;
 }
 
 Snake::~Snake() {}
@@ -29,12 +24,12 @@ Snake::~Snake() {}
 // Refresh snake's body position to achieve its movement. There are a judgment
 // forbiden the snake reverse move.
 void Snake::RefreshBody(char nowDirection) {
-  tailH = snakeBody.back().r;
-  tailL = snakeBody.back().c;
+  tailRow = snakeBody.back().row;
+  tailCol = snakeBody.back().col;
   for (vector<point>::iterator it = snakeBody.end() - 1; it > snakeBody.begin();
        it--) {
-    it->r = (it - 1)->r;
-    it->c = (it - 1)->c;
+    it->row = (it - 1)->row;
+    it->col = (it - 1)->col;
   }
   // Exclude special cases of reverse movement.
   if (this->snakeDirection == 'w' && nowDirection == 's') {
@@ -53,16 +48,16 @@ void Snake::RefreshBody(char nowDirection) {
     // If there is no change in direction.
     switch (this->snakeDirection) {
       case 'w':
-        snakeBody.front().r--;
+        snakeBody.front().row--;
         break;
       case 'a':
-        snakeBody.front().c--;
+        snakeBody.front().col--;
         break;
       case 's':
-        snakeBody.front().r++;
+        snakeBody.front().row++;
         break;
       case 'd':
-        snakeBody.front().c++;
+        snakeBody.front().col++;
         break;
     }
   } else {
@@ -70,25 +65,25 @@ void Snake::RefreshBody(char nowDirection) {
     switch (nowDirection) {
       case 'w':
         snakeDirection = 'w';
-        snakeBody.front().r--;
+        snakeBody.front().row--;
         break;
       case 'a':
         snakeDirection = 'a';
-        snakeBody.front().c--;
+        snakeBody.front().col--;
         break;
       case 's':
         snakeDirection = 's';
-        snakeBody.front().r++;
+        snakeBody.front().row++;
         break;
       case 'd':
         snakeDirection = 'd';
-        snakeBody.front().c++;
+        snakeBody.front().col++;
         break;
     }
   }
   // Reset the position of the snake head.
-  headH = snakeBody.front().r;
-  headL = snakeBody.front().c;
+  headRow = snakeBody.front().row;
+  headCol = snakeBody.front().col;
   return;
 }
 
@@ -96,8 +91,8 @@ void Snake::RefreshBody(char nowDirection) {
 // when the snake eat a dot there will be a new body be pushed.
 void Snake::NewBody() {
   struct point newBody;
-  newBody.r = tailH;
-  newBody.c = tailL;
+  newBody.row = tailRow;
+  newBody.col = tailCol;
   snakeBody.push_back(newBody);
   this->snakeLength++;
 }
@@ -106,7 +101,7 @@ void Snake::NewBody() {
 bool Snake::SelfCheck() {
   for (vector<point>::iterator it = snakeBody.begin() + 1; it < snakeBody.end();
        it++) {
-    if (it->r == snakeBody.front().r && it->c == snakeBody.front().c) {
+    if (it->row == snakeBody.front().row && it->col == snakeBody.front().col) {
       return true;
     }
   }
