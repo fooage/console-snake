@@ -3,6 +3,8 @@
 
 #ifdef __WIN32__
 #include <windows.h>
+#elif __linux
+#include <stdio.h>
 #endif
 
 #include <cmath>

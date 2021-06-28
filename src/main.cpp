@@ -10,6 +10,34 @@ HANDLE outBufferA =
 HANDLE *outPuter;
 COORD coord = {0, 0};
 DWORD bytes = 0;
+#elif __linux
+#include <fcntl.h>
+#include <stdio.h>
+#include <sys/ioctl.h>
+#include <termios.h>
+#include <unistd.h>
+// Redefined keyboard input monitoring function for input game operations.
+int kbhit() {
+  termios oldSettings, nowSettings;
+  char peekCharacter;
+  tcgetattr(STDIN_FILENO, &oldSettings);
+  nowSettings = oldSettings;
+  nowSettings.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &nowSettings);
+  int oldOption = fcntl(STDIN_FILENO, F_GETFL, 0);
+  fcntl(STDIN_FILENO, F_SETFL, oldOption | O_NONBLOCK);
+  peekCharacter = getchar();
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
+  fcntl(STDIN_FILENO, F_SETFL, oldOption);
+  if (peekCharacter != EOF) {
+    ungetc(peekCharacter, stdin);
+    return 1;
+  } else {
+    return 0;
+  }
+}
+// Replace the Sleep function on windows to get the same effect.
+#define Sleep(x) usleep(x * 1000)
 #endif
 
 #include <cmath>
@@ -39,6 +67,11 @@ int main() {
   GetConsoleScreenBufferInfo(handle, &screenInfo);
   maxRows = screenInfo.srWindow.Bottom + 1;
   maxCols = ceil((screenInfo.srWindow.Right + 1) * 1.0 / 2);
+#elif __linux
+  winsize winSize;
+  ioctl(STDOUT_FILENO, TIOCGWINSZ, &winSize);
+  maxRows = winSize.ws_row;
+  maxCols = ceil(winSize.ws_col * 1.0 / 2);
 #endif
   map = vector<vector<char>>(maxRows, vector<char>(maxCols));
   Snake playerSnake;
@@ -47,11 +80,17 @@ int main() {
   int *pDotRow = &dotRow, *pDotCol = &dotCol;
   MakeDot(pDotRow, pDotCol, playerSnake);
   while (1) {
-// Non-blocking monitoring the control events when keyboard is pressed.
-#ifdef __WIN32__
+    // Non-blocking monitoring the control events when keyboard is pressed.
     if (kbhit()) {
+#ifdef __WIN32__
       nowDirection = getch();
+#elif __linux
+      nowDirection = getchar();
 #endif
+      // The operation of Ctrl-C to exit;
+      if (nowDirection == 3) {
+        return 0;
+      }
       switch (tolower(nowDirection)) {
         case 'w':
           playerSnake.RefreshBody('w');
@@ -73,7 +112,6 @@ int main() {
     if (playerSnake.headRow == 0 || playerSnake.headCol == 0 ||
         playerSnake.headRow == maxRows - 1 ||
         playerSnake.headCol == maxCols - 1 || playerSnake.SelfCheck()) {
-      // TODO: A screen showing the end of the game to show the player's score.
       ShowGameOver();
       cin.get();
       return 0;
