@@ -16,18 +16,13 @@ DWORD bytes = 0;
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
+termios oldSettings, nowSettings;
 // Redefined keyboard input monitoring function for input game operations.
 int kbhit() {
-    termios oldSettings, nowSettings;
     char peekCharacter;
-    tcgetattr(STDIN_FILENO, &oldSettings);
-    nowSettings = oldSettings;
-    nowSettings.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &nowSettings);
     int oldOption = fcntl(STDIN_FILENO, F_GETFL, 0);
     fcntl(STDIN_FILENO, F_SETFL, oldOption | O_NONBLOCK);
     peekCharacter = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
     fcntl(STDIN_FILENO, F_SETFL, oldOption);
     if (peekCharacter != EOF) {
         ungetc(peekCharacter, stdin);
@@ -69,6 +64,11 @@ int main() {
     maxCols = ceil((screenInfo.srWindow.Right + 1) * 1.0 / 2);
 #elif __linux
     winsize winSize;
+    // Turn off the terminal's echo and record the settings of old.
+    tcgetattr(STDIN_FILENO, &oldSettings);
+    nowSettings = oldSettings;
+    nowSettings.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &nowSettings);
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &winSize);
     maxRows = winSize.ws_row;
     maxCols = ceil(winSize.ws_col * 1.0 / 2);
@@ -89,6 +89,10 @@ int main() {
 #endif
             // The operation of Ctrl-C to exit;
             if (nowDirection == 3) {
+#ifdef __linux
+                // Recover terminal's default settings.
+                tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
+#endif
                 return 0;
             }
             switch (tolower(nowDirection)) {
@@ -113,7 +117,16 @@ int main() {
             playerSnake.headRow == maxRows - 1 ||
             playerSnake.headCol == maxCols - 1 || playerSnake.SelfCheck()) {
             ShowGameOver();
-            cin.get();
+            while (1) {
+                char ch = getchar();
+                if (ch == 3) {
+                    break;
+                }
+            }
+#ifdef __linux
+            // Recover terminal's default settings.
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
+#endif
             return 0;
         }
         if (playerSnake.headRow == dotRow && playerSnake.headCol == dotCol) {

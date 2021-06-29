@@ -99,5 +99,7 @@ void ShowGameOver() {
                                  &bytes);
 #elif __linux
     printf("\033[%d;%dH%s", y + 1, x + 1, temp.c_str());
+    // Recover the coord's position.
+    printf("\033[%d;%dH", maxRows, maxCols);
 #endif
 }
