@@ -52,13 +52,13 @@ int main() {
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO cursorInfo;
     CONSOLE_SCREEN_BUFFER_INFO screenInfo;
-    // Hide the cursor when screen output.
+    // Hide the cursor when screen output. Set the cursor to point to the image
+    // buffer areas. Get the info of this console and set the row and column for
+    // the matrix.
     cursorInfo.bVisible = false;
     cursorInfo.dwSize = 1;
-    // Set the cursor to point to the image buffer areas.
     SetConsoleCursorInfo(outBufferA, &cursorInfo);
     SetConsoleCursorInfo(outBufferB, &cursorInfo);
-    // Get the info of this console and set the row and column for the matrix.
     GetConsoleScreenBufferInfo(handle, &screenInfo);
     maxRows = screenInfo.srWindow.Bottom + 1;
     maxCols = ceil((screenInfo.srWindow.Right + 1) * 1.0 / 2);
@@ -87,10 +87,10 @@ int main() {
 #elif __linux
             nowDirection = getchar();
 #endif
-            // The operation of Ctrl-C to exit;
+            // operation of Ctrl-C to exit
             if (nowDirection == 3) {
 #ifdef __linux
-                // Recover terminal's default settings.
+                // recover terminal's default settings
                 tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
 #endif
                 return 0;
@@ -112,7 +112,8 @@ int main() {
         } else {
             playerSnake.RefreshBody(1);
         }
-        // Check if it hits the wall or hits the body.
+        // Check if it hits the wall or hits the body. If the judgment is
+        // successful, the game is over.
         if (playerSnake.headRow == 0 || playerSnake.headCol == 0 ||
             playerSnake.headRow == maxRows - 1 ||
             playerSnake.headCol == maxCols - 1 || playerSnake.SelfCheck()) {
@@ -124,7 +125,7 @@ int main() {
                 }
             }
 #ifdef __linux
-            // Recover terminal's default settings.
+            // recover terminal's default settings
             tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
 #endif
             return 0;

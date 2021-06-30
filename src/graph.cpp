@@ -12,11 +12,13 @@ extern COORD coord;
 extern DWORD bytes;
 #endif
 
-// ShowGraphics is a double buffer display function.
+// A double buffer display function. Here is a macro command to distinguish the
+// code of the two platforms.
 void ShowGraphics(Snake playerSnake) {
 #ifdef __WIN32__
     showCircle = !showCircle;
-    // Switch current buffer to write down the image.
+    // Switch current buffer to write down the image and this is the key of the
+    // double-buffer output on the screen.
     if (showCircle) {
         outPuter = &outBufferA;
     } else {
@@ -46,8 +48,8 @@ void ShowGraphics(Snake playerSnake) {
 #endif
     }
     delete[] temp;
-// Set the new buffer to save the image.
 #ifdef __WIN32__
+    // Set the new buffer to save the image.
     SetConsoleActiveScreenBuffer(*outPuter);
 #endif
 }
@@ -58,7 +60,7 @@ void DrawGraphics(Snake playerSnake) {
             map[i][j] = ' ';
         }
     }
-    // Build the map border.
+    // build the map border
     for (int i = 0; i < maxRows; i++) {
         map[i][0] = '#';
         map[i][maxCols - 1] = '#';
@@ -99,7 +101,7 @@ void ShowGameOver() {
                                  &bytes);
 #elif __linux
     printf("\033[%d;%dH%s", y + 1, x + 1, temp.c_str());
-    // Recover the coord's position.
+    // recover the coord's position
     printf("\033[%d;%dH", maxRows, maxCols);
 #endif
 }

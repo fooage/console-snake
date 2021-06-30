@@ -45,7 +45,7 @@ void Snake::RefreshBody(char nowDirection) {
         nowDirection = 1;
     }
     if (nowDirection == 1) {
-        // If there is no change in direction.
+        // there is no change in direction
         switch (this->snakeDirection) {
             case 'w':
                 snakeBody.front().row--;
@@ -61,7 +61,7 @@ void Snake::RefreshBody(char nowDirection) {
                 break;
         }
     } else {
-        // If there is a change in direction.
+        // there is a change in direction
         switch (nowDirection) {
             case 'w':
                 snakeDirection = 'w';
@@ -81,7 +81,7 @@ void Snake::RefreshBody(char nowDirection) {
                 break;
         }
     }
-    // Reset the position of the snake head.
+    // reset position of snake head
     headRow = snakeBody.front().row;
     headCol = snakeBody.front().col;
     return;
@@ -97,7 +97,7 @@ void Snake::NewBody() {
     this->snakeLength++;
 }
 
-// Self-check if snake hits himself.
+// self-check if snake hits himself
 bool Snake::SelfCheck() {
     for (vector<point>::iterator it = snakeBody.begin() + 1;
          it < snakeBody.end(); it++) {
