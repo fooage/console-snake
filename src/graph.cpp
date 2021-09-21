@@ -1,6 +1,6 @@
 #include "../inc/graph.h"
 
-extern vector<vector<char>> map;
+extern vector<vector<char> > map;
 extern int maxRows, maxCols;
 
 #ifdef __WIN32__
@@ -38,7 +38,7 @@ void ShowGraphics(Snake playerSnake) {
         coord.Y = i;
         WriteConsoleOutputCharacterA(*outPuter, temp, maxCols * 2, coord,
                                      &bytes);
-#elif __linux
+#elif __linux | __APPLE__
         printf("\033[%d;%dH%s", i + 1, 0, temp);
         if (i != maxRows - 1) {
             printf("\n");
@@ -97,7 +97,7 @@ void ShowGameOver() {
     coord.Y = y;
     WriteConsoleOutputCharacterA(*outPuter, temp.c_str(), temp.length(), coord,
                                  &bytes);
-#elif __linux
+#elif __linux | __APPLE__
     printf("\033[%d;%dH%s", y + 1, x + 1, temp.c_str());
     // Recover the coord's position.
     printf("\033[%d;%dH", maxRows, maxCols);

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-extern vector<vector<char>> map;
+extern vector<vector<char> > map;
 
 // The snake's constructor set the start location, direction and the initial
 // length of the snake.
