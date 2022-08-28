@@ -1,5 +1,4 @@
 #ifdef __WIN32__
-
 #include <conio.h>
 #include <windows.h>
 HANDLE outBufferA = CreateConsoleScreenBuffer(
@@ -9,9 +8,7 @@ HANDLE outBufferB = CreateConsoleScreenBuffer(
 HANDLE *outPuter;
 COORD coord = {0, 0};
 DWORD bytes = 0;
-
 #elif __linux
-
 #include <fcntl.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
@@ -34,7 +31,6 @@ int kbhit() {
 }
 // Replace the Sleep function on windows to get the same effect.
 #define Sleep(x) usleep(x * 1000)
-
 #endif
 
 #include <cmath>
